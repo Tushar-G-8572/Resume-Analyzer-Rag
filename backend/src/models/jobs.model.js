@@ -15,7 +15,11 @@ const jobSchema = new mongoose.Schema({
 
     location: {
         type: String,
+        enum:["Remote","On Site"],
         default: "Remote"
+    },
+    salary:{
+        type:Number,
     },
 
     description: {
@@ -42,11 +46,6 @@ const jobSchema = new mongoose.Schema({
     embeddingId: {
         type: String // reference to vector DB (Pinecone/Chroma)
     },
-
-    // Optional: store chunks for debugging
-    jdChunks: [{
-        type: String
-    }],
 
     status: {
         type: String,
