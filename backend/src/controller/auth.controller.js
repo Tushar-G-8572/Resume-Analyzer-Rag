@@ -1,5 +1,9 @@
 import userModel from "../models/user.model.js";
 import jwt from 'jsonwebtoken';
+import { parseResume } from "../services/AI-Service/ai.service.js";
+import { storeResumeAndGetUrl } from "../services/ImageKit-Services/storage.service.js";
+import { extractionResumeData } from "../services/AI-Service/resume.extraction.service.js";
+
 
 export async function handleRegisterController(req, res) {
     try {
@@ -161,4 +165,33 @@ export async function handleLogoutController(req, res) {
             message: "Error while logging out"
         });
     }
+}
+
+export async function handleUplaodResume(req,res) {
+    try{
+
+        const {id,role} = req.user;
+        // console.log(id,role)
+        if(role === 'recruiter'){
+        return res.status(403).json({success:false,message:"Unauthorised"});
+    }
+
+    const resume = req.file
+    const buffer = resume.buffer;
+    // console.log(buffer);
+    const resumeUrl = await storeResumeAndGetUrl(buffer);
+
+    const resumeData = await parseResume(resume);
+    const aiSummary = await extractionResumeData(resumeData);
+
+    await userModel.findByIdAndUpdate(id,{
+        resumeUrl:resumeUrl,
+        resumeParsedData:aiSummary
+    })
+    
+    return res.status(201).json({success:true,message:"Resume Uploaded"})
+}catch(error){
+    console.error(error);
+    return res.status(500).json({success:false,message:"Error while uploading resume"});
+}
 }

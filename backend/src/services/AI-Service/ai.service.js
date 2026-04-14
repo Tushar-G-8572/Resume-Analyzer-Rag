@@ -73,7 +73,7 @@ export async function parseResume(pdf) {
         const buffer = pdf.buffer;
 
         const data = await PDFParse(buffer); // ✅ call directly with buffer
-        console.log("Parsed text:", data.text);
+        // console.log("Parsed text:", data.text);
 
         return data.text;
 
@@ -84,7 +84,8 @@ export async function parseResume(pdf) {
 }
 
 export async function matchJob(pdfData, jobEmbeddingId) {
-    const resumeVector = await generateEmbeddings(pdfData);
+
+    const resumeVector = await generateEmbeddings(pdfData.join(" "));
 
     const result = await index.query({
         id: jobEmbeddingId,

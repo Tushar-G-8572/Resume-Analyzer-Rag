@@ -21,7 +21,7 @@ const applicationSchema = new mongoose.Schema({
 
     // 🔥 RAG OUTPUT FIELDS
     matchScore: {
-        type: Number, // percentage (0-100)
+        type: Number, // 0-10
         default: 0
     },
 

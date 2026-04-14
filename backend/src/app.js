@@ -1,7 +1,7 @@
 import express from 'express'
 import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.routes.js';
-import applyRouter from './routes/application.route.js';
+import applyRouter from './routes/application.routes.js';
 import jobRouter from './routes/job.routes.js';
 
 const app = express();
